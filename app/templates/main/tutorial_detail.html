@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}" class="text-decoration-none"><i class="bi bi-house"></i> Home</a></li>
+        <li class="breadcrumb-item"><a href="{{ url_for('main.tutorials_list') }}" class="text-decoration-none">Tutoriais</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ tutorial.title }}</li>
+    </ol>
+</nav>
+
+<!-- Tutorial Header -->
+<div class="card border-0 shadow-sm mb-4 bg-white overflow-hidden">
+    <div class="card-body p-4 p-md-5">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start mb-3">
+            <div>
+                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold mb-2 d-inline-block">
+                    <i class="bi bi-journal-bookmark me-1"></i> Minicurso / Tutorial
+                </span>
+                <h1 class="display-6 fw-bold text-dark mb-2">{{ tutorial.title }}</h1>
+            </div>
+            {% if current_user and current_user.is_administrator() %}
+            <div class="mt-3 mt-md-0 d-flex gap-2">
+                <a href="{{ url_for('main.edit_tutorial', id=tutorial.id) }}" class="btn btn-outline-warning btn-sm">
+                    <i class="bi bi-pencil-square me-1"></i> Editar Tutorial
+                </a>
+                <form action="{{ url_for('main.delete_tutorial', id=tutorial.id) }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Deseja excluir este tutorial?')">
+                        <i class="bi bi-trash me-1"></i> Excluir
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        
+        <p class="lead text-secondary mb-4" style="max-width: 850px;">
+            {{ tutorial.description or 'Sem descrição cadastrada.' }}
+        </p>
+        
+        <div class="d-flex align-items-center gap-4 text-muted small border-top pt-3">
+            <span><i class="bi bi-list-ol text-primary me-1"></i> <strong>{{ posts|length }}</strong> artigo(s) ordenado(s)</span>
+            <span><i class="bi bi-calendar3 me-1"></i> Criado em {{ tutorial.created_at.strftime('%d/%m/%Y') }}</span>
+        </div>
+    </div>
+</div>
+
+<!-- Ordered Posts Section -->
+<div class="mb-4">
+    <h3 class="fw-bold mb-3"><i class="bi bi-sort-numeric-down text-primary me-2"></i>Conteúdo do Tutorial (Ordem Sequencial)</h3>
+    <p class="text-muted mb-4">Siga a ordem dos artigos abaixo para acompanhar a trilha completa de aprendizado.</p>
+</div>
+
+<div class="tutorial-timeline">
+    {% for post in posts %}
+    <div class="card border-0 shadow-sm mb-4 bg-white overflow-hidden hover-up position-relative">
+        <div class="card-body p-4">
+            <div class="row align-items-center g-3">
+                <div class="col-auto">
+                    <div class="step-badge bg-primary text-white fw-bold rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                        {{ loop.index }}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="d-flex align-items-center text-muted small mb-1">
+                        <span class="me-3"><i class="bi bi-calendar3 me-1"></i> {{ post.created_at.strftime('%d/%m/%Y') }}</span>
+                        {% if post.categories %}
+                        <span class="me-3"><i class="bi bi-tags me-1"></i>
+                            {% for cat in post.categories %}
+                                <span class="badge bg-light text-secondary border me-1">{{ cat.name }}</span>
+                            {% endfor %}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <h4 class="h5 fw-bold mb-2">
+                        <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-dark text-decoration-none hover-primary">
+                            {{ post.title }}
+                        </a>
+                    </h4>
+                    <p class="card-text text-secondary small mb-0">
+                        {{ post.excerpt or post.content[:180] ~ '...' }}
+                    </p>
+                </div>
+                <div class="col-md-auto text-md-end mt-3 mt-md-0">
+                    <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="btn btn-outline-primary btn-sm px-4 fw-semibold rounded-pill">
+                        Ler artigo <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5 bg-white rounded-3 shadow-sm border">
+        <i class="bi bi-journal-x fs-1 text-muted mb-3 d-block"></i>
+        <h5 class="text-muted">Nenhum artigo vinculado a este tutorial no momento.</h5>
+        {% if current_user and current_user.is_administrator() %}
+        <a href="{{ url_for('main.edit_tutorial', id=tutorial.id) }}" class="btn btn-primary mt-2">
+            Adicionar Posts ao Tutorial
+        </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .hover-up {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hover-up:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+    }
+</style>
+{% endblock %}

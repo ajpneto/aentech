@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            {% if category %}
+                <h2 class="fw-bold mb-1">Categoria: {{ category.name }}</h2>
+                <p class="text-muted mb-0">{{ category.description }}</p>
+            {% elif query %}
+                <h2 class="fw-bold mb-1">Resultados para: "{{ query }}"</h2>
+            {% else %}
+                <h2 class="fw-bold mb-1">{{ title }}</h2>
+            {% endif %}
+        </div>
+        {% if current_user and current_user.is_administrator() %}
+        <div>
+            <a href="{{ url_for('main.create_post') }}" class="btn btn-primary">
+                <i class="bi bi-plus-lg me-2"></i> Novo Post
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8">
+            {% for post in posts.items %}
+                <article class="card mb-4 border-0 shadow-sm overflow-hidden">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="card-title h4 fw-bold mb-0">
+                                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-dark text-decoration-none hover-primary">
+                                    {{ post.title }}
+                                </a>
+                            </h3>
+                            {% if not post.is_published %}
+                                <span class="badge bg-warning text-dark px-2 py-1">Rascunho</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex align-items-center text-muted small mb-3">
+                            <span class="me-3"><i class="bi bi-calendar3 me-1"></i> {{ post.created_at.strftime('%d/%m/%Y') }}</span>
+                            <span class="me-3"><i class="bi bi-chat-left-text me-1"></i> {{ post.comments.count() }}</span>
+                            {% if post.categories %}
+                                <span><i class="bi bi-tags me-1"></i> 
+                                    {% for category in post.categories %}
+                                        <a href="{{ url_for('main.category_posts', slug=category.slug) }}" class="text-muted text-decoration-none">{{ category.name }}</a>{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <p class="card-text text-secondary mb-4">{{ post.excerpt }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="btn btn-outline-primary btn-sm px-3">
+                                Ler mais
+                            </a>
+                            {% if current_user and current_user.is_administrator() %}
+                            <div class="btn-group">
+                                <a href="{{ url_for('main.edit_post', id=post.id) }}" class="btn btn-light btn-sm text-warning" title="Editar">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <form action="{{ url_for('main.delete_post', id=post.id) }}" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-light btn-sm text-danger" title="Excluir" onclick="return confirm('Deseja excluir este post?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            {% else %}
+                <div class="text-center py-5 bg-white rounded-3 shadow-sm">
+                    <i class="bi bi-journal-x fs-1 text-muted mb-3 d-block"></i>
+                    <h4 class="text-muted">Nenhum post encontrado.</h4>
+                    <p class="text-muted mb-4">Comece criando sua primeira postagem!</p>
+                    <a href="{{ url_for('main.create_post') }}" class="btn btn-primary">Criar Post</a>
+                </div>
+            {% endfor %}
+            
+            <!-- Pagination -->
+            {% if posts.pages > 1 %}
+                <nav aria-label="Navegação de página" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        {% if posts.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link border-0 shadow-sm mx-1 rounded" href="{{ url_for(request.endpoint, page=posts.prev_num, q=query if query else '', **request.view_args) }}">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for page_num in posts.iter_pages(left_edge=1, left_current=2, right_current=2, right_edge=1) %}
+                            {% if page_num %}
+                                <li class="page-item {% if page_num == posts.page %}active{% endif %}">
+                                    <a class="page-link border-0 shadow-sm mx-1 rounded" href="{{ url_for(request.endpoint, page=page_num, q=query if query else '', **request.view_args) }}">
+                                        {{ page_num }}
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link border-0 shadow-sm mx-1 rounded">...</span>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if posts.has_next %}
+                            <li class="page-item">
+                                <a class="page-link border-0 shadow-sm mx-1 rounded" href="{{ url_for(request.endpoint, page=posts.next_num, q=query if query else '', **request.view_args) }}">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+        
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                    <h5 class="fw-bold mb-0">Categorias</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for category in cats %}
+                            <a href="{{ url_for('main.category_posts', slug=category.slug) }}" class="btn btn-light btn-sm text-secondary border-0 px-3">
+                                {{ category.name }} <span class="badge bg-white text-primary ms-1 shadow-sm">{{ category.posts.count() }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                    <h5 class="fw-bold mb-0">Sobre estas Notas</h5>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-secondary small mb-0">
+                        Este espaço é para anotações e publicações locais. O objetivo final é viabilizar o design preditivo de dispositivos de armazenamento de energia essenciais para a transição energética global. 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

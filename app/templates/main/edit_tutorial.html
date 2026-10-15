@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Tutorial — Admin Aentech{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('main.tutorials_list') }}" class="btn btn-sm btn-outline-secondary mb-2">
+        <i class="bi bi-arrow-left me-1"></i> Voltar para Tutoriais
+    </a>
+    <h2 class="fw-bold text-dark mb-1">Editar Tutorial / Minicurso</h2>
+    <p class="text-muted mb-0">Atualize o título, a descrição e ajuste a ordem e seleção dos posts vinculados.</p>
+</div>
+
+<form method="POST" action="{{ url_for('main.edit_tutorial', id=tutorial.id) }}">
+    {{ form.hidden_tag() }}
+    
+    <div class="row g-4">
+        <!-- Basic Information -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm p-4 bg-white mb-4">
+                <h5 class="fw-bold mb-3 text-primary"><i class="bi bi-pencil-square me-2"></i>Editar Informações</h5>
+                
+                <div class="mb-3">
+                    <label for="title" class="form-label fw-semibold">Título do Tutorial <span class="text-danger">*</span></label>
+                    {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else "")) }}
+                    {% if form.title.errors %}
+                        <div class="invalid-feedback">{{ form.title.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label for="slug" class="form-label fw-semibold">Slug URL</label>
+                    {{ form.slug(class="form-control" + (" is-invalid" if form.slug.errors else "")) }}
+                    {% if form.slug.errors %}
+                        <div class="invalid-feedback">{{ form.slug.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <label for="description" class="form-label fw-semibold">Descrição / Resumo</label>
+                    {{ form.description(class="form-control", rows="5") }}
+                </div>
+                
+                <div class="d-grid gap-2 pt-2">
+                    {{ form.submit(class="btn btn-primary btn-lg fw-bold", value="Salvar Alterações") }}
+                    <a href="{{ url_for('main.tutorial_detail', identifier=tutorial.slug) }}" class="btn btn-light">Ver Tutorial</a>
+                    <a href="{{ url_for('main.tutorials_list') }}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Post Selection & Manual Ordering -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm p-4 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h5 class="fw-bold mb-1 text-primary"><i class="bi bi-list-check me-2"></i>Posts e Ordenação Manuais</h5>
+                        <p class="text-muted x-small mb-0">Ajuste a sequência de números de ordem dos artigos.</p>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnSelectChemistry">
+                        <i class="bi bi-droplet-half me-1"></i> Selecionar Química
+                    </button>
+                </div>
+                
+                <!-- Quick Filter Search -->
+                <div class="mb-3">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search"></i></span>
+                        <input type="text" id="postFilter" class="form-control border-start-0" placeholder="Filtrar posts por título...">
+                    </div>
+                </div>
+                
+                <div class="table-responsive border rounded-3" style="max-height: 480px; overflow-y: auto;">
+                    <table class="table table-hover align-middle mb-0" id="postsTable">
+                        <thead class="bg-light sticky-top">
+                            <tr>
+                                <th style="width: 40px;" class="text-center">#</th>
+                                <th style="width: 90px;">Ordem</th>
+                                <th>Título do Post</th>
+                                <th>Categoria</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in all_posts %}
+                            {% set is_selected = post.id in current_post_orders %}
+                            {% set order_val = current_post_orders.get(post.id, loop.index) %}
+                            <tr class="post-row {% if is_selected %}table-primary{% endif %}" data-title="{{ post.title|lower }}" data-categories="{% for c in post.categories %}{{ c.slug }} {% endfor %}">
+                                <td class="text-center">
+                                    <input type="checkbox" name="selected_posts" value="{{ post.id }}" id="post_chk_{{ post.id }}" class="form-check-input post-checkbox" {% if is_selected %}checked{% endif %}>
+                                </td>
+                                <td>
+                                    <input type="number" name="order_{{ post.id }}" value="{{ order_val }}" min="1" max="999" class="form-control form-control-sm order-input" style="width: 70px;">
+                                </td>
+                                <td>
+                                    <label for="post_chk_{{ post.id }}" class="fw-semibold text-dark mb-0 style-pointer cursor-pointer">
+                                        {{ post.title }}
+                                    </label>
+                                    <div class="x-small text-muted">{{ post.created_at.strftime('%d/%m/%Y') }}</div>
+                                </td>
+                                <td>
+                                    {% for c in post.categories %}
+                                    <span class="badge {% if c.slug == 'quimica' %}bg-primary{% else %}bg-secondary{% endif %} bg-opacity-75 me-1 small">
+                                        {{ c.name }}
+                                    </span>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">Nenhum post publicado disponível.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterInput = document.getElementById('postFilter');
+    filterInput.addEventListener('keyup', function() {
+        const query = this.value.toLowerCase();
+        document.querySelectorAll('.post-row').forEach(row => {
+            const title = row.getAttribute('data-title');
+            row.style.display = title.includes(query) ? '' : 'none';
+        });
+    });
+
+    const checkboxes = document.querySelectorAll('.post-checkbox');
+    checkboxes.forEach(chk => {
+        chk.addEventListener('change', function() {
+            const row = this.closest('tr');
+            if (this.checked) {
+                row.classList.add('table-primary');
+            } else {
+                row.classList.remove('table-primary');
+            }
+        });
+    });
+
+    const btnChemistry = document.getElementById('btnSelectChemistry');
+    if (btnChemistry) {
+        btnChemistry.addEventListener('click', function() {
+            let count = 1;
+            document.querySelectorAll('.post-row').forEach(row => {
+                const cats = row.getAttribute('data-categories');
+                if (cats.includes('quimica')) {
+                    const chk = row.querySelector('.post-checkbox');
+                    const ord = row.querySelector('.order-input');
+                    chk.checked = true;
+                    ord.value = count++;
+                    row.classList.add('table-primary');
+                }
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

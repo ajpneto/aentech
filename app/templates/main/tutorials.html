@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-collection-play text-primary me-2"></i>Tutoriais & Minicursos</h2>
+        <p class="text-muted mb-0">Trilhas de aprendizado e seleções organizadas de artigos e materiais técnicos.</p>
+    </div>
+    {% if current_user and current_user.is_administrator() %}
+    <div>
+        <a href="{{ url_for('main.create_tutorial') }}" class="btn btn-primary shadow-sm">
+            <i class="bi bi-plus-lg me-1"></i> Novo Tutorial
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<div class="row g-4">
+    {% for tutorial in tutorials %}
+    <div class="col-lg-6">
+        <div class="card h-100 border-0 shadow-sm overflow-hidden hover-up">
+            <div class="card-body p-4 d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill fw-semibold">
+                        <i class="bi bi-journal-check me-1"></i> {{ tutorial.tutorial_posts|length }} materiais vinculados
+                    </span>
+                    <small class="text-muted"><i class="bi bi-clock me-1"></i> {{ tutorial.created_at.strftime('%d/%m/%Y') }}</small>
+                </div>
+                
+                <h3 class="h4 fw-bold mb-2">
+                    <a href="{{ url_for('main.tutorial_detail', identifier=tutorial.slug) }}" class="text-dark text-decoration-none hover-primary">
+                        {{ tutorial.title }}
+                    </a>
+                </h3>
+                
+                <p class="text-secondary small flex-grow-1 mb-4" style="line-height: 1.6;">
+                    {{ tutorial.description or 'Sem descrição cadastrada para este tutorial.' }}
+                </p>
+                
+                <div class="d-flex justify-content-between align-items-center mt-auto border-top pt-3">
+                    <a href="{{ url_for('main.tutorial_detail', identifier=tutorial.slug) }}" class="btn btn-primary btn-sm px-4 fw-semibold rounded-pill">
+                        Acessar Tutorial <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                    
+                    {% if current_user and current_user.is_administrator() %}
+                    <div class="btn-group">
+                        <a href="{{ url_for('main.edit_tutorial', id=tutorial.id) }}" class="btn btn-light btn-sm text-warning" title="Editar">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                        <form action="{{ url_for('main.delete_tutorial', id=tutorial.id) }}" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-light btn-sm text-danger" title="Excluir" onclick="return confirm('Deseja excluir este tutorial?')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12 text-center py-5 bg-white rounded-3 shadow-sm border">
+        <i class="bi bi-collection-play fs-1 text-muted mb-3 d-block"></i>
+        <h4 class="text-muted">Nenhum tutorial ou minicurso disponível no momento.</h4>
+        <p class="text-muted mb-4">Os administradores podem adicionar novas trilhas organizando os posts existentes.</p>
+        {% if current_user and current_user.is_administrator() %}
+        <a href="{{ url_for('main.create_tutorial') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Criar Primeiro Tutorial
+        </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .hover-up {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hover-up:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important;
+    }
+</style>
+{% endblock %}

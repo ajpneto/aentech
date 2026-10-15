@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold mb-3">STEM Survey Submission</h1>
+            <p class="lead text-muted">A detailed analysis of the current state of Chemical Sciences taxonomy and computational workflows.</p>
+            <hr class="w-25 mx-auto">
+        </div>
+    </div>
+
+    <!-- Selected Fields Section -->
+    <div class="row mb-5">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <div class="card h-100 shadow-sm border-0 bg-light">
+                <div class="card-body p-4">
+                    <h3 class="h5 fw-bold mb-3 text-primary"><i class="bi bi-diagram-3-fill me-2"></i>Selected Domains (L1/L3)</h3>
+                    <ul class="list-group list-group-flush bg-transparent">
+                        {% for item in survey.selP1 %}
+                        <li class="list-group-item bg-transparent px-0 border-0">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>{{ item }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100 shadow-sm border-0 bg-light">
+                <div class="card-body p-4">
+                    <h3 class="h5 fw-bold mb-3 text-primary"><i class="bi bi-tags-fill me-2"></i>Specific Research Areas (L4)</h3>
+                    <ul class="list-group list-group-flush bg-transparent">
+                        {% for item in survey.selL4 %}
+                        <li class="list-group-item bg-transparent px-0 border-0">
+                            <i class="bi bi-tag-fill text-info me-2"></i>{{ item }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Taxonomy Structure Commentary -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 overflow-hidden">
+                <div class="card-header bg-primary text-white py-3">
+                    <h3 class="h5 fw-bold mb-0"><i class="bi bi-chat-text-fill me-2"></i>Commentary on Taxonomy adequacy</h3>
+                </div>
+                <div class="card-body p-4">
+                    <p class="card-text lead fs-6" style="white-space: pre-line; line-height: 1.7;">{{ survey.p1_structure }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Domain Descriptions -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="fw-bold mb-4 text-dark">Domain Insights</h2>
+            <div class="accordion shadow-sm" id="domainAccordion">
+                {% for key, val in survey.p3.items() %}
+                <div class="accordion-item border-0 mb-3 rounded shadow-sm">
+                    <h2 class="accordion-header" id="heading-{{ loop.index0 }}">
+                        <button class="accordion-button collapsed fw-bold text-primary bg-white py-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ loop.index0 }}" aria-expanded="false" aria-controls="collapse-{{ loop.index0 }}">
+                            <i class="bi bi-info-circle-fill me-2"></i> {{ key }}
+                        </button>
+                    </h2>
+                    <div id="collapse-{{ loop.index0 }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ loop.index0 }}" data-bs-parent="#domainAccordion">
+                        <div class="accordion-body bg-white border-top p-4">
+                            <p class="text-secondary" style="white-space: pre-line; line-height: 1.6;">{{ val }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Workflows Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="fw-bold mb-4 text-dark">Core Workflows</h2>
+            <div class="row g-4">
+                {% for w in survey.workflows %}
+                <div class="col-12">
+                    <div class="card h-100 shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start mb-3 gap-2">
+                                <h4 class="h5 fw-bold text-primary mb-0">Workflow {{ loop.index }}</h4>
+                                <span class="badge bg-secondary text-wrap text-start" style="max-width: 100%;">{{ w.time_duration }}</span>
+                            </div>
+                            <div class="mb-3">
+                                {% for field in w.l4_fields %}
+                                <span class="badge bg-light text-dark border me-1 mb-1">{{ field }}</span>
+                                {% endfor %}
+                            </div>
+                            <p class="card-text small text-muted mb-4" style="white-space: pre-line;">{{ w.description }}</p>
+                            
+                            <h5 class="h6 fw-bold mb-2 text-dark"><i class="bi bi-folder-fill me-1 text-primary"></i> Data & Software</h5>
+                            <p class="card-text small text-secondary mb-4" style="white-space: pre-line;">{{ w.data_and_software }}</p>
+                            
+                            <div class="bg-dark text-light p-3 rounded">
+                                <h5 class="h6 fw-bold mb-2 text-warning"><i class="bi bi-terminal me-2"></i>Expert Prompt</h5>
+                                <p class="card-text x-small mb-0 text-light-50" style="font-family: monospace; font-size: 0.8rem;">{{ w.prompt_for_claude }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Tasks Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="fw-bold mb-4 text-dark">Detailed Sub-Tasks</h2>
+            <div class="row g-4">
+                {% for t in survey.tasks %}
+                <div class="col-12">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start mb-3 gap-2">
+                                <div>
+                                    <h4 class="h5 fw-bold text-success mb-2">Task {{ loop.index }}</h4>
+                                    <div class="mb-0">
+                                        {% for field in t.l4_fields %}
+                                        <span class="badge bg-light text-dark border me-1 mb-1 small">{{ field }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <span class="badge bg-secondary text-wrap text-start" style="max-width: 100%;">{{ t.time_duration }}</span>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-7">
+                                    <h5 class="h6 fw-bold mb-2 text-dark"><i class="bi bi-info-circle-fill me-2 text-success"></i>Description</h5>
+                                    <p class="card-text small text-muted mb-4" style="white-space: pre-line;">{{ t.description }}</p>
+                                    
+                                    <h5 class="h6 fw-bold mb-2 text-dark"><i class="bi bi-patch-check-fill me-2 text-success"></i>Artifacts & Evaluation</h5>
+                                    <p class="card-text small mb-4" style="white-space: pre-line;">{{ t.artifacts_and_evaluation }}</p>
+                                </div>
+                                <div class="col-md-5">
+                                    <h5 class="h6 fw-bold mb-2 text-dark"><i class="bi bi-cpu-fill me-2 text-success"></i>Data & Software</h5>
+                                    <p class="card-text small mb-4" style="white-space: pre-line;">{{ t.data_and_software }}</p>
+                                    
+                                    {% if t.llm_issues %}
+                                    <div class="alert alert-warning py-2 px-3 mb-4 border-0 shadow-sm">
+                                        <h6 class="h6 fw-bold mb-1 small text-dark"><i class="bi bi-exclamation-triangle-fill me-2"></i>LLM Challenges</h6>
+                                        <p class="card-text x-small mb-0 text-muted">{{ t.llm_issues }}</p>
+                                    </div>
+                                    {% endif %}
+
+                                    <div class="bg-dark text-light p-3 rounded shadow">
+                                        <h5 class="h6 fw-bold mb-2 small text-warning"><i class="bi bi-terminal me-2"></i>Execution Prompt</h5>
+                                        <p class="card-text x-small mb-0 text-light-50" style="font-family: monospace; font-size: 0.75rem;">{{ t.prompt_for_claude }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Future Directions (p6) -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <div class="p-5 bg-light rounded shadow-sm border">
+                <h3 class="fw-bold mb-4 text-primary"><i class="bi bi-rocket-takeoff-fill me-2"></i>Future Trans-Disciplinary Directions</h3>
+                <p class="lead mb-0 text-secondary fs-5">{{ survey.p6 }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Info -->
+    <div class="row mt-5">
+        <div class="col-12 text-center text-muted border-top pt-4">
+            <p>Submitted by: <span class="fw-bold text-dark">{{ survey.respondent_email }}</span></p>
+            <p class="small">Time spent on survey: {{ survey.time_spent }}</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .x-small {
+        font-size: 0.75rem;
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: #f8f9fa;
+        color: var(--primary-color);
+        box-shadow: none;
+    }
+    .card-text {
+        line-height: 1.6;
+    }
+</style>
+{% endblock %}

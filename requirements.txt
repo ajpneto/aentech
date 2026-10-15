@@ -1,0 +1,12 @@
+Flask==2.2.2
+Flask-Bootstrap
+Flask-WTF
+Flask-SQLAlchemy==3.0.2
+Flask-Migrate==3.1.0
+Jinja2==3.1.2
+Werkzeug==2.2.2
+Flask-Reuploaded
+python-dotenv
+email-validator
+python-slugify
+flask-moment

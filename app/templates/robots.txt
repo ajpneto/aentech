@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Áreas administrativas e de conta
+Disallow: /login
+Disallow: /logout
+Disallow: /create
+Disallow: /my-posts
+Disallow: /drafts
+Disallow: /categories
+Disallow: /admin/
+Disallow: /post/*/edit
+Disallow: /post/*/delete
+Disallow: /tutoriais/novo
+Disallow: /tutoriais/*/editar
+
+# Resultados de busca não precisam ser indexados
+Disallow: /search
+
+Sitemap: {{ sitemap_url }}

@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white py-5 mb-5 rounded-4 shadow-sm" style="background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);">
+    <div class="container px-4">
+        <div class="row align-items-center">
+            <div class="col-lg-7 hero-content mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-3 text-light">Aentech</h1>
+                <p class="lead mb-4">Explorando a interseção entre ciência computacional e ciências da vida por meio de pesquisas de ponta, ferramentas de simulação e aplicações práticas.</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ url_for('main.posts_list') }}" class="btn btn-light btn-lg text-primary fw-semibold px-4 shadow-sm">
+                        <i class="bi bi-book me-2"></i>Ler Artigos
+                    </a>
+                    <a href="#resources" class="btn btn-outline-light btn-lg px-4">
+                        <i class="bi bi-cpu me-2"></i>Recursos & Ferramentas
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                <div class="position-relative d-inline-block">
+                    <div class="position-absolute top-50 start-50 translate-middle bg-primary rounded-circle filter-blur" style="width: 250px; height: 250px; opacity: 0.15; z-index: 0;"></div>
+                    <i class="bi bi-mortarboard-fill text-light" style="font-size: 12rem; line-height: 1; z-index: 1; position: relative;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Search Section -->
+<section class="py-4 bg-white rounded-3 shadow-sm mb-5 border">
+    <div class="container px-4">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h3 class="h4 fw-bold mb-2">Busca Rápida</h3>
+                <p class="text-muted mb-4">Pesquise por artigos, ferramentas, tópicos de interesse ou termos de química computacional.</p>
+                <form action="{{ url_for('main.search') }}" method="GET" class="mb-4">
+                    <div class="input-group input-group-lg shadow-sm rounded">
+                        <input type="text" 
+                               name="q" 
+                               class="form-control border-end-0 bg-light" 
+                               placeholder="Digite termos como GROMACS, molecular simulation..." 
+                               aria-label="Buscar"
+                               required>
+                        <button class="btn btn-primary px-4 fw-bold" type="submit">
+                            <i class="bi bi-search me-2"></i>Buscar
+                        </button>
+                    </div>
+                </form>
+                <div class="d-flex flex-wrap justify-content-center gap-2 align-items-center">
+                    <small class="text-muted me-2">Sugestões:</small>
+                    <a href="{{ url_for('main.search', q='simulation') }}" class="badge bg-secondary text-decoration-none px-3 py-2">simulation</a>
+                    <a href="{{ url_for('main.search', q='chemistry') }}" class="badge bg-secondary text-decoration-none px-3 py-2">chemistry</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="py-5 mb-5 bg-white rounded-3 shadow-sm border">
+    <div class="container px-4">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="fw-bold mb-3"><i class="bi bi-info-circle text-primary me-2"></i>Sobre a Plataforma AENTECH</h2>
+                <p class="text-secondary" style="line-height: 1.7;">Esta plataforma é dedicada à disseminação de conhecimento avançado na intersecção entre a <strong>computação científica e as ciências da vida</strong>. Com bases em química, física e biologia estrutural, focamos em demonstrar como algoritmos modernos, dinâmica molecular e machine learning revolucionam áreas críticas como o desenvolvimento de fármacos e novos materiais.</p>
+                <p class="text-secondary" style="line-height: 1.7;">Nosso objetivo é prover tanto insights teóricos quanto recursos computacionais práticos diretamente no navegador, eliminando atritos de infraestrutura local.</p>
+                <div class="mt-4">
+                    <a href="#resources" class="btn btn-primary me-2">Acessar Ferramentas</a>
+                    <a href="{{ url_for('main.survey') }}" class="btn btn-outline-secondary">Visualizar Pesquisa STEM</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light p-3 shadow-sm hover-up">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded text-primary me-3">
+                                    <i class="bi bi-droplet-half fs-3"></i>
+                                </div>
+                                <h5 class="mb-0 fw-bold">Físico-Química</h5>
+                            </div>
+                            <p class="small text-secondary mb-0">Cálculo de coeficientes de transporte, viscosidade e determinação estrutural de arranjos em misturas líquidas binárias.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light p-3 shadow-sm hover-up">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded text-primary me-3">
+                                    <i class="bi bi-cpu fs-3"></i>
+                                </div>
+                                <h5 class="mb-0 fw-bold">Química Teórica</h5>
+                            </div>
+                            <p class="small text-secondary mb-0">Resolução de correlação eletrônica, desenvolvimento de potenciais de redes neurais e simulação de dinâmica molecular (GROMACS).</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light p-3 shadow-sm hover-up">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded text-primary me-3">
+                                    <i class="bi bi-diagram-3 fs-3"></i>
+                                </div>
+                                <h5 class="mb-0 fw-bold">Materiais & Polímeros</h5>
+                            </div>
+                            <p class="small text-secondary mb-0">Dinâmica molecular com metadinâmica (PLUMED) para mapear paisagens de energia livre de polímeros como PEG50.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 bg-light p-3 shadow-sm hover-up">
+                            <div class="d-flex align-items-center mb-2">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded text-primary me-3">
+                                    <i class="bi bi-intersect fs-3"></i>
+                                </div>
+                                <h5 class="mb-0 fw-bold">Quimioinformática</h5>
+                            </div>
+                            <p class="small text-secondary mb-0">Triagem virtual e filtros de compostos usando métricas de similaridade e análise de andaimes moleculares.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Posts Section (Replacing posts partial) -->
+<section class="py-5 mb-5 bg-white rounded-3 shadow-sm border">
+    <div class="container px-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-1">Últimas Publicações</h2>
+                <p class="text-muted mb-0">Fique por dentro das últimas discussões e artigos adicionados ao blog.</p>
+            </div>
+            <a href="{{ url_for('main.posts_list') }}" class="btn btn-outline-primary btn-sm px-3 fw-semibold">
+                Ver Todos <i class="bi bi-chevron-right ms-1"></i>
+            </a>
+        </div>
+        
+        <div class="row g-4">
+            {% for post in recent_posts %}
+            <div class="col-lg-4 col-md-6">
+                <article class="card h-100 border-0 shadow-sm bg-light hover-up overflow-hidden">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="d-flex align-items-center text-muted small mb-2">
+                            <span><i class="bi bi-calendar3 me-1"></i> {{ post.created_at.strftime('%d/%m/%Y') }}</span>
+                            <span class="mx-2">&bull;</span>
+                            <span><i class="bi bi-chat-left-text me-1"></i> {{ post.comments.count() }}</span>
+                        </div>
+                        
+                        <h4 class="card-title h5 fw-bold mb-2">
+                            <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-dark text-decoration-none hover-primary">
+                                {{ post.title }}
+                            </a>
+                        </h4>
+                        
+                        <p class="card-text text-secondary small flex-grow-1 mb-4">{{ post.excerpt or post.content[:150] ~ '...' }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-auto border-top pt-3">
+                            <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="btn btn-link text-primary p-0 fw-semibold text-decoration-none text-start small">
+                                Ler artigo completo <i class="bi bi-chevron-right ms-1"></i>
+                            </a>
+                            {% if post.categories.first() %}
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary text-wrap text-end small" style="max-width: 50%;">
+                                {{ post.categories.first().name }}
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-journal-x fs-1 text-muted mb-3 d-block"></i>
+                <h5 class="text-muted">Nenhum post publicado no momento.</h5>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Personal Interests Section -->
+<section class="py-5 bg-white rounded-3 shadow-sm border mb-5">
+    <div class="container px-4">
+        <h2 class="fw-bold text-center mb-5">Mais Além da Ciência</h2>
+        <div class="row g-4">
+            <div class="col-md-4 text-center">
+                <div class="bg-primary bg-opacity-10 text-primary d-inline-flex p-3 rounded-circle mb-3">
+                    <i class="bi bi-compass fs-3"></i>
+                </div>
+                <h5 class="fw-bold">Caminhadas & Reflexão</h5>
+                <p class="text-secondary small">Buscando clareza mental e inspiração através de caminhadas atentas pela natureza, conectando o rigor científico com a observação espontânea do mundo físico.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="bg-success bg-opacity-10 text-success d-inline-flex p-3 rounded-circle mb-3">
+                    <i class="bi bi-music-note-beamed fs-3"></i>
+                </div>
+                <h5 class="fw-bold">Música & Criatividade</h5>
+                <p class="text-secondary small">Explorando como ritmos, harmonia e timbres exercem influência nos processos cognitivos e na resolução de problemas complexos que surgem na bancada computacional.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="bg-info bg-opacity-10 text-info d-inline-flex p-3 rounded-circle mb-3">
+                    <i class="bi bi-film fs-3"></i>
+                </div>
+                <h5 class="fw-bold">Cinema & Narrativas</h5>
+                <p class="text-secondary small">Estudando a estrutura de roteiros, enquadramentos e direção de arte em filmes e séries clássicos para aprimorar a didática na comunicação de conceitos científicos complexos.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .hover-up {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hover-up:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    .hover-card {
+        transition: border 0.2s, box-shadow 0.2s;
+    }
+    .hover-card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+    }
+</style>
+{% endblock %}

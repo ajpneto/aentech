@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<style>
+    /* About Section */
+    .about-img {
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+     
+    .about-img:hover {
+        transform: scale(1.02);
+    }
+     
+    .stat-box {
+        padding: 1.5rem;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+    }
+     
+    .stat-box:hover {
+        transform: translateY(-5px);
+    }
+
+    .concept-card {
+        background: rgba(255,255,255,0.95);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        border-left: 4px solid #4f46e5;
+    }
+
+    .concept-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.08) !important;
+    }
+
+    .hero-chemistry {
+        background: linear-gradient(135deg, #4f46e5 0%, #312e81 100%);
+        border-radius: 15px;
+    }
+
+    .code-box {
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 0.78rem;
+        line-height: 1.5;
+        border-left: 4px solid;
+    }
+
+    .hover-up {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hover-up:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section id="hero-chemistry" class="hero-chemistry text-white py-5 mb-5 rounded-4 shadow-sm">
+    <div class="container text-center px-4">
+        <h1 class="display-4 fw-bold mb-3 text-light">Fronteiras Químicas & Computacionais</h1>
+        <p class="lead mb-4">A base teórica de termodinâmica, estrutura eletrônica e mecânica estatística conectando simulações atomísticas com a taxonomia das ciências químicas.</p>
+        <a href="#knowledge-path" class="btn btn-light btn-lg text-primary fw-semibold px-4 shadow-sm">
+            Iniciar Jornada <i class="bi bi-arrow-down ms-1"></i>
+        </a>
+    </div>
+</section>
+
+<!-- Knowledge Path Section -->
+<section id="knowledge-path" class="py-5 mb-5 bg-white rounded-3 shadow-sm border">
+    <div class="container px-4">
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10 text-center">
+                <h2 class="fw-bold mb-3 text-dark">Construindo Fundamentos Químicos</h2>
+                <p class="lead text-muted">
+                    Conectamos conceitos clássicos de química a aplicações práticas de modelagem molecular, dinâmica computacional e quimioinformática.
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="concept-card p-4 h-100 shadow-sm bg-light">
+                    <div class="text-primary mb-3">
+                        <i class="bi bi-droplet-half display-6"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Termodinâmica & Fluidos</h4>
+                    <p class="text-muted small mb-3">
+                        Compreensão de interações e forças intermoleculares em fase líquida, essencial para calcular propriedades de transporte, difusão e viscosidade de cisalhamento.
+                    </p>
+                    <span class="badge bg-primary bg-opacity-10 text-primary">Mecânica Estatística</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="concept-card p-4 h-100 shadow-sm bg-light">
+                    <div class="text-primary mb-3">
+                        <i class="bi bi-cpu display-6"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Estrutura Eletrônica</h4>
+                    <p class="text-muted small mb-3">
+                        Modelagem quântica do comportamento eletrônico e orbitais moleculares, base para parametrização de potenciais clássicos e redes neurais de Machine Learning.
+                    </p>
+                    <span class="badge bg-primary bg-opacity-10 text-primary">Química Quântica</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="concept-card p-4 h-100 shadow-sm bg-light">
+                    <div class="text-primary mb-3">
+                        <i class="bi bi-diagram-3 display-6"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark">Topologia & Similaridade</h4>
+                    <p class="text-muted small mb-3">
+                        Representação digital e mapeamento computacional de estruturas químicas para triagem virtual acelerada e análise de similaridade molecular.
+                    </p>
+                    <span class="badge bg-primary bg-opacity-10 text-primary">Quimioinformática</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section - Updated -->
+<section class="py-5 mb-5 bg-white rounded-3 shadow-sm border">
+    <div class="container px-4">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <div class="row g-3">
+                    <div class="col-md-6 text-start">
+                        <div class="code-box bg-dark text-white p-3 rounded-3 shadow-sm mb-3" style="border-color: #f59e0b;">
+                            <span class="text-warning fw-semibold">// Análise de Transporte em Fluidos</span><br>
+                            viscosidade = calcular_propriedades(flutuacao_pressao)<br>
+                            difusao = integrar_deslocamento(trajetoria_atomica)
+                        </div>
+                        <div class="code-box bg-primary text-white p-3 rounded-3 shadow-sm mb-3 mb-md-0" style="border-color: #818cf8;">
+                            <span class="text-light opacity-75 fw-semibold">// Parâmetros Moleculares</span><br>
+                            raio_giracao = medir_compactacao(polimero)<br>
+                            distancia_pontas = medir_extensao(cadeia)
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-start d-flex flex-column justify-content-center">
+                        <div class="code-box bg-light border text-dark p-3 rounded-3 shadow-sm mb-3" style="border-color: #10b981;">
+                            <span class="text-success fw-bold">// Triagem & Similaridade</span><br>
+                            indice_similaridade = comparar_estruturas(mol_A, mol_B)<br>
+                            candidatos = filtrar_biblioteca(compostos_ativos)
+                        </div>
+                        <div class="code-box bg-dark text-white p-3 rounded-3 shadow-sm" style="border-color: #06b6d4;">
+                            <span class="text-info fw-semibold">// Modelagem Eletrônica</span><br>
+                            densidade_eletronica = resolver_orbitais(geometria)<br>
+                            energia_potencial = parametrizar_campo_forca()
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4 text-dark"><i class="bi bi-intersect text-primary me-2"></i>Conhecimento Transdisciplinar</h2>
+                <p class="fw-normal text-muted mb-4" style="line-height: 1.7;">
+                    A plataforma AENTECH conecta conceitos de ciências físicas e biológicas com engenharia de software e aprendizado de máquina. Através de conteúdo técnico e análise de dados, promovemos uma visão ativa e investigativa dos processos moleculares que fundamentam o desenvolvimento biotecnológico e a ciência dos materiais moderna.
+                </p>
+                <div class="row g-4 mb-4">
+                    <div class="col-sm-6">
+                        <div class="stat-box bg-light border">
+                            <div class="d-flex align-items-center">
+                                <h3 class="text-primary fw-bolder mb-0">3</h3>
+                                <div class="ps-3">
+                                    <p class="mb-0 text-muted small">Domínios L3</p>
+                                    <h6 class="text-uppercase mb-0 small fw-bold">Analisados</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="stat-box bg-light border">
+                            <div class="d-flex align-items-center">
+                                <h3 class="text-success fw-bolder mb-0">7</h3>
+                                <div class="ps-3">
+                                    <p class="mb-0 text-muted small">Áreas L4</p>
+                                    <h6 class="text-uppercase mb-0 small fw-bold">Mapeadas</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('main.survey') }}" class="btn btn-primary">Mapeamento da Pesquisa STEM</a>
+                    <a href="{{ url_for('main.chemistry_posts') }}" class="btn btn-outline-secondary">Artigos de Química</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission Statement -->
+<section class="py-5 bg-light rounded-3 shadow-sm border mb-5">
+    <div class="container px-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <blockquote class="blockquote mb-0">
+                    <p class="fs-4 fst-italic text-dark mb-3">
+                        "Compreender a matéria e suas interações na escala atômica nos fornece as chaves para modelar e prever a complexidade da própria vida."
+                    </p>
+                    <footer class="blockquote-footer mt-1">Conexão Teoria-Prática AENTECH</footer>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Posts Section (Replacing posts) -->
+<section class="py-5 mb-5 bg-white rounded-3 shadow-sm border">
+    <div class="container px-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-1">Discussões Recentes</h2>
+                <p class="text-muted mb-0">Artigos do blog sobre simulação molecular e química teórica.</p>
+            </div>
+            <a href="{{ url_for('main.chemistry_posts') }}" class="btn btn-outline-primary btn-sm px-3 fw-semibold">
+                Ver Todos <i class="bi bi-chevron-right ms-1"></i>
+            </a>
+        </div>
+        
+        <div class="row g-4">
+            {% for post in recent_posts %}
+            <div class="col-lg-4 col-md-6">
+                <article class="card h-100 border-0 shadow-sm bg-light hover-up overflow-hidden">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <div class="d-flex align-items-center text-muted small mb-2">
+                            <span><i class="bi bi-calendar3 me-1"></i> {{ post.created_at.strftime('%d/%m/%Y') }}</span>
+                            <span class="mx-2">&bull;</span>
+                            <span><i class="bi bi-chat-left-text me-1"></i> {{ post.comments.count() }}</span>
+                        </div>
+                        
+                        <h4 class="card-title h5 fw-bold mb-2">
+                            <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-dark text-decoration-none hover-primary">
+                                {{ post.title }}
+                            </a>
+                        </h4>
+                        
+                        <p class="card-text text-secondary small flex-grow-1 mb-4">{{ post.excerpt or post.content[:150] ~ '...' }}</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-auto border-top pt-3">
+                            <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="btn btn-link text-primary p-0 fw-semibold text-decoration-none text-start small">
+                                Ler artigo completo <i class="bi bi-chevron-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-journal-x fs-1 text-muted mb-3 d-block"></i>
+                <h5 class="text-muted">Nenhum post publicado no momento.</h5>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
